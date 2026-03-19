@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login - Signal System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="container">
+    <h1>Signal Platform</h1>
+
+    <p class="subtitle">
+        Login with your Elephantbet account to start generating signals
+    </p>
+
+    <form method="POST">
+        <input type="text" name="username" placeholder="Username" required>
+        <input type="password" name="password" placeholder="Password" required>
+
+        <button type="submit">Login</button>
+    </form>
+
+    <p class="info">
+        Access Bac Bo and Aviator signals with precision strategies
+    </p>
+
+    <p class="error">{{ message }}</p>
+
+    <div class="terms">
+        <p>Terms and Services</p>
+        <small>
+            This platform provides predictive tools and does not guarantee profits.
+            Use responsibly.
+        </small>
+    </div>
+</div>
+
+</body>
+</html>
