@@ -12,7 +12,7 @@ def validate_user(username, password):
 def login():
     message = ""
     if request.method == "POST":
-        username = request.form["username"]
+        username = request.form["number"]
         password = request.form["password"]
 
         if validate_user(username, password):
