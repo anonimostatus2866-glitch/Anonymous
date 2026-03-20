@@ -147,3 +147,57 @@ input:focus {
         font-size: 2rem;
     }
 }
+/* Logo bonito no topo (estilo Google G) */
+.logo-top {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.logo-glow {
+    position: relative;
+    display: inline-block;
+    width: 140px;
+    height: 140px;
+    background: linear-gradient(135deg, #00d4ff, #0077b6, #00ff9d);
+    border-radius: 50%;
+    box-shadow: 0 0 60px rgba(0, 212, 255, 0.7), inset 0 0 30px rgba(255,255,255,0.3);
+    animation: pulse 3s infinite;
+}
+
+.logo-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 5.5rem;
+    font-weight: 700;
+    color: white;
+    text-shadow: 0 0 20px rgba(0,0,0,0.6);
+    letter-spacing: -5px;
+}
+
+.logo-subtitle {
+    margin-top: 10px;
+    font-size: 1.4rem;
+    color: #00ff9d;
+    font-weight: 600;
+    text-shadow: 0 0 10px rgba(0,255,157,0.5);
+}
+
+@keyframes pulse {
+    0% { box-shadow: 0 0 60px rgba(0, 212, 255, 0.7); }
+    50% { box-shadow: 0 0 100px rgba(0, 212, 255, 1); }
+    100% { box-shadow: 0 0 60px rgba(0, 212, 255, 0.7); }
+}
+
+/* Ajustes mobile para o logo */
+@media (max-width: 480px) {
+    .logo-glow {
+        width: 120px;
+        height: 120px;
+    }
+    .logo-text {
+        font-size: 4.8rem;
+        letter-spacing: -4px;
+    }
+}
