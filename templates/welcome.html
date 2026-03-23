@@ -15,20 +15,34 @@
         </div>
 
         <div class="welcome-box">
-            <h1>Welcome!</h1>
-            <p class="beta">BETA VERSION – FREE FOR 3 DAYS!</p>
+<div class="signal-system">
 
-            <div class="message">
-                <h2>Signal generation will begin shortly.</h2>
-                <p>We are still in the development and improvement phase of the system.</p>
-                <p>Initialization depends on your device, connection speed, and network quality.</p>
-                <p>Thank you for joining us from the beginning – stay tuned!</p>
-            </div>
+    <h2>AI Engine Status</h2>
 
-            <div class="note">
-                Experimental tool, 99% accurate.<br>
-                No real signal is being generated yet.
-            </div>
+    <div class="status">
+        <span id="status">Analyzing market patterns...</span>
+    </div>
+
+    <div class="progress-bar">
+        <div id="progress"></div>
+    </div>
+
+    <div class="signal-output">
+        <h1 id="signal">--</h1>
+        <p id="confidence">Confidence: --%</p>
+        <p id="time">Entry in: --s</p>
+    </div>
+
+    <div class="history">
+        <h3>Recent Signals</h3>
+        <ul id="history"></ul>
+    </div>
+
+    <div class="vip-lock">
+        🔒 VIP Ultra Signals Locked
+    </div>
+
+</div>
         </div>
     </div>
 </body>
