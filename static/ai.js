@@ -1,72 +1,89 @@
-let historyList = [];
+let currentSignal = null;
+let realResult = null;
 
-function generateSmartSignal() {
+function generateRound() {
     let base = Math.random();
 
-    let value;
-    let confidence;
+    if (base < 0.5) return (1 + Math.random()).toFixed(2);
+    if (base < 0.8) return (2 + Math.random() * 2).toFixed(2);
+    return (4 + Math.random() * 5).toFixed(2);
+}
 
-    if (base < 0.5) {
-        value = (1.20 + Math.random()).toFixed(2);
-        confidence = Math.floor(60 + Math.random() * 20);
-    } else if (base < 0.8) {
-        value = (2 + Math.random() * 2).toFixed(2);
-        confidence = Math.floor(70 + Math.random() * 20);
-    } else {
-        value = (4 + Math.random() * 5).toFixed(2);
-        confidence = Math.floor(80 + Math.random() * 15);
-    }
+function generateSignal() {
+    let value = (1.5 + Math.random() * 2).toFixed(2);
+    let confidence = Math.floor(70 + Math.random() * 25);
 
     return { value: value + "x", confidence };
 }
 
-function updateSystem() {
-    let progress = 0;
-    let bar = document.getElementById("progress");
+function startCycle() {
+    let countdown = 10;
     let status = document.getElementById("status");
 
-    let interval = setInterval(() => {
-        progress += 5;
-        bar.style.width = progress + "%";
+    status.innerText = "Next round in: " + countdown + "s";
 
-        if (progress >= 100) {
-            clearInterval(interval);
+    let timer = setInterval(() => {
+        countdown--;
+        status.innerText = "Next round in: " + countdown + "s";
 
-            status.innerText = "Signal ready";
-
-            let signal = generateSmartSignal();
-
-            document.getElementById("signal").innerText = signal.value;
-            document.getElementById("confidence").innerText =
-                "Confidence: " + signal.confidence + "%";
-
-            let entryTime = Math.floor(Math.random() * 10) + 3;
-            document.getElementById("time").innerText =
-                "Entry in: " + entryTime + "s";
-
-            addToHistory(signal.value);
-
-            setTimeout(resetSystem, 3000);
+        if (countdown <= 0) {
+            clearInterval(timer);
+            startRound();
         }
-    }, 200);
+    }, 1000);
 }
 
-function resetSystem() {
-    document.getElementById("progress").style.width = "0%";
-    document.getElementById("status").innerText = "Analyzing patterns...";
-    updateSystem();
+function startRound() {
+    let status = document.getElementById("status");
+
+    status.innerText = "Analyzing next flight...";
+
+    setTimeout(() => {
+        currentSignal = generateSignal();
+        realResult = generateRound();
+
+        document.getElementById("signal").innerText = currentSignal.value;
+        document.getElementById("confidence").innerText =
+            "Confidence: " + currentSignal.confidence + "%";
+
+        status.innerText = "Signal sent — waiting result...";
+
+        evaluateResult();
+    }, 3000);
 }
 
-function addToHistory(value) {
+function evaluateResult() {
+    setTimeout(() => {
+        let signalValue = parseFloat(currentSignal.value);
+        let resultValue = parseFloat(realResult);
+
+        let resultText;
+
+        if (resultValue >= signalValue) {
+            resultText = "WIN ✅ (" + realResult + "x)";
+        } else {
+            resultText = "LOSS ❌ (" + realResult + "x)";
+        }
+
+        document.getElementById("time").innerText = resultText;
+
+        addToHistory(currentSignal.value, resultText);
+
+        setTimeout(startCycle, 4000);
+    }, 4000);
+}
+
+function addToHistory(signal, result) {
     let history = document.getElementById("history");
+
     let li = document.createElement("li");
-    li.innerText = value;
+    li.innerText = signal + " → " + result;
 
     history.prepend(li);
 
-    if (history.children.length > 6) {
+    if (history.children.length > 8) {
         history.removeChild(history.lastChild);
     }
 }
 
-updateSystem();
+startCycle();
