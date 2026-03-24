@@ -62,3 +62,15 @@ def get_live_signal():
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=10000)
+
+# Adicione estas linhas logo abaixo de chrome_options.add_argument("--disable-dev-shm-usage")
+chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
+chrome_options.add_argument("--remote-debugging-port=9222")
+chrome_options.add_argument("--proxy-server='direct://'")
+chrome_options.add_argument("--proxy-bypass-list=*")
+
+# Altere a linha do driver para esta:
+driver = webdriver.Chrome(
+    service=Service(os.environ.get("CHROMEDRIVER_PATH")), 
+    options=chrome_options
+)
