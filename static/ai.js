@@ -1,89 +1,59 @@
-let currentSignal = null;
-let realResult = null;
+let lastSignalReceived = "";
 
-function generateRound() {
-    let base = Math.random();
+async function syncWithElephantBet() {
+    const status = document.getElementById("status");
+    const signalDisplay = document.getElementById("signal");
+    const confidenceDisplay = document.getElementById("confidence");
+    const historyList = document.getElementById("history");
+    const resultDisplay = document.getElementById("time");
 
-    if (base < 0.5) return (1 + Math.random()).toFixed(2);
-    if (base < 0.8) return (2 + Math.random() * 2).toFixed(2);
-    return (4 + Math.random() * 5).toFixed(2);
-}
+    try {
+        const response = await fetch('/get-live-signal');
+        const data = await response.json();
 
-function generateSignal() {
-    let value = (1.5 + Math.random() * 2).toFixed(2);
-    let confidence = Math.floor(70 + Math.random() * 25);
+        // Se houver um novo round finalizado no site oficial
+        if (data.new_round) {
+            // 1. Mostra o resultado do round que acabou de fechar
+            const lastVal = parseFloat(data.last_result);
+            const targetVal = parseFloat(lastSignalReceived);
+            
+            if (lastSignalReceived !== "") {
+                if (lastVal >= targetVal) {
+                    resultDisplay.innerText = `WIN ✅ (${lastVal}x)`;
+                    resultDisplay.style.color = "#00ff88";
+                } else {
+                    resultDisplay.innerText = `LOSS ❌ (${lastVal}x)`;
+                    resultDisplay.style.color = "#ff4444";
+                }
+            }
 
-    return { value: value + "x", confidence };
-}
+            // 2. Atualiza para o NOVO sinal sugerido pela IA
+            status.innerText = "NOVA OPORTUNIDADE IDENTIFICADA!";
+            signalDisplay.innerText = data.signal;
+            confidenceDisplay.innerText = "Confiança: " + data.confidence + "%";
+            lastSignalReceived = data.signal;
 
-function startCycle() {
-    let countdown = 10;
-    let status = document.getElementById("status");
-
-    status.innerText = "Next round in: " + countdown + "s";
-
-    let timer = setInterval(() => {
-        countdown--;
-        status.innerText = "Next round in: " + countdown + "s";
-
-        if (countdown <= 0) {
-            clearInterval(timer);
-            startRound();
-        }
-    }, 1000);
-}
-
-function startRound() {
-    let status = document.getElementById("status");
-
-    status.innerText = "Analyzing next flight...";
-
-    setTimeout(() => {
-        currentSignal = generateSignal();
-        realResult = generateRound();
-
-        document.getElementById("signal").innerText = currentSignal.value;
-        document.getElementById("confidence").innerText =
-            "Confidence: " + currentSignal.confidence + "%";
-
-        status.innerText = "Signal sent — waiting result...";
-
-        evaluateResult();
-    }, 3000);
-}
-
-function evaluateResult() {
-    setTimeout(() => {
-        let signalValue = parseFloat(currentSignal.value);
-        let resultValue = parseFloat(realResult);
-
-        let resultText;
-
-        if (resultValue >= signalValue) {
-            resultText = "WIN ✅ (" + realResult + "x)";
+            // 3. Atualiza a lista visual de histórico real
+            historyList.innerHTML = "";
+            data.history.forEach(val => {
+                let li = document.createElement("li");
+                li.innerText = val + "x";
+                li.style.color = parseFloat(val) > 2 ? "#b042ff" : "#fff";
+                historyList.prepend(li);
+            });
         } else {
-            resultText = "LOSS ❌ (" + realResult + "x)";
+            if (status.innerText === "Initializing AI...") {
+                status.innerText = "Sincronizado. Aguardando próximo voo...";
+            }
         }
-
-        document.getElementById("time").innerText = resultText;
-
-        addToHistory(currentSignal.value, resultText);
-
-        setTimeout(startCycle, 4000);
-    }, 4000);
-}
-
-function addToHistory(signal, result) {
-    let history = document.getElementById("history");
-
-    let li = document.createElement("li");
-    li.innerText = signal + " → " + result;
-
-    history.prepend(li);
-
-    if (history.children.length > 8) {
-        history.removeChild(history.lastChild);
+    } catch (error) {
+        console.error("Erro na sincronização:", error);
+        status.innerText = "Erro de conexão...";
     }
+
+    // Consulta o servidor a cada 2 segundos para precisão
+    setTimeout(syncWithElephantBet, 2000);
 }
 
-startCycle();
+// Inicia o ciclo de sincronização
+syncWithElephantBet();
