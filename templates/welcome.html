@@ -1,50 +1,98 @@
 <!DOCTYPE html>
+
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8" />
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Welcome – ElephantBet Signals</title>
+
+    <title>ElephantBet Signals - Beta</title>
+
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
 </head>
+
 <body>
-    <div class="container welcome">
+
+    <div class="container">
+
+        <!-- Logo bonito no topo (como o G do Google) -->
+
+        <div class="logo-top">
+
+            <div class="logo-glow">
+
+                <span class="logo-text">EBS</span>
+
+            </div>
+
+            <p class="logo-subtitle">ElephantBet Signals</p>
+
+        </div>
+
+
+
         <div class="logo-section">
-            <img src="https://i.imgur.com/0Z5Z5Z5.png" alt="Aviator" class="game-img aviator" />
-            <img src="https://i.imgur.com/QwErTyU.png" alt="Bac Bo" class="game-img bacbo" />
+
+            <img src="https://tibahia.com/wp-content/uploads/2023/12/aviator.jpg" alt="Aviator Game" class="game-img aviator" />
+
+            <img src="https://acontecebotucatu.com.br/wp-content/uploads/2025/02/01.jpg" alt="Bac Bo Game" class="game-img bacbo" />
+
         </div>
 
-        <div class="welcome-box">
-<div class="signal-system">
 
-    <h2>AI Engine Status</h2>
 
-    <div class="status">
-        <span id="status">Analyzing market patterns...</span>
-    </div>
+        <div class="login-box">
 
-    <div class="progress-bar">
-        <div id="progress"></div>
-    </div>
+            <h1>ElephantBet Signals</h1>
 
-    <div class="signal-output">
-        <h1 id="signal">--</h1>
-        <p id="confidence">Confidence: --%</p>
-        <p id="time">Entry in: --s</p>
-    </div>
+            <p class="beta">BETA VERSION – FREE FOR 3 DAYS!</p>
 
-    <div class="history">
-        <h3>Recent Signals</h3>
-        <ul id="history"></ul>
-    </div>
+            <p class="subtitle">
 
-    <div class="vip-lock">
-        🔒 VIP Ultra Signals Locked
-    </div>
+                Experimental tool, with 98% accuracy.
 
-</div>
+                Login with your ElephantBet account to start receiving signals
+
+            </p>
+
+
+
+            <form method="POST">
+
+                <div class="input-group">
+
+                    <input type="text" name="username" placeholder="ElephantBet number" required />
+
+                </div>
+
+                <div class="input-group">
+
+                    <input type="password" name="password" placeholder="Elephantbet Password" required />
+
+                </div>
+
+                <button type="submit" class="btn">LOGIN TO START SIGNALS</button>
+
+            </form>
+
+
+
+            <p class="info">
+
+                Experimental tool, with 98% accuracy.
+
+            </p>
+
         </div>
+
     </div>
 <script src="{{ url_for('static', filename='ai.js') }}"></script>
 </body>
+
 </html>
+
