@@ -1,76 +1,58 @@
-import os
-import threading
-import time
-from flask import Flask, render_template, jsonify
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.common.by import By
+# fake user validation
 
-app = Flask(__name__)
+def validate_user(username, password):
 
-live_data = {"history": [], "last_result": None, "new_round": False, "signal": "Aguardando...", "confidence": 0}
+    if len(username) > 3 and len(password) > 3:
 
-def monitor_aviator():
-    global live_data
-    options = Options()
-    options.add_argument("--headless")
-    options.add_argument("--no-sandbox")
-    options.add_argument("--disable-dev-shm-usage")
-    options.binary_location = "/usr/bin/google-chrome" # Caminho do Docker
+        return True
 
-    driver = webdriver.Chrome(service=Service("/usr/local/bin/chromedriver"), options=options)
-    
-    try:
-        driver.get("https://www.elephantbet.co.ao/games/aviator")
-        time.sleep(20)
-        last_payout = ""
+    return False
 
-        while True:
-            try:
-                # Seletor para os multiplicadores do Aviator
-                elements = driver.find_elements(By.CSS_SELECTOR, ".payouts-block .bubble-multiplier")
-                if elements:
-                    current = [el.text.replace('x', '').strip() for el in elements if el.text]
-                    if current and current[0] != last_payout:
-                        last_payout = current[0]
-                        live_data.update({
-                            "history": current[:10],
-                            "last_result": float(last_payout),
-                            "new_round": True,
-                            "signal": "2.00x" if float(last_payout) < 1.5 else "1.50x",
-                            "confidence": 92
-                        })
-            except: pass
-            time.sleep(2)
-    finally:
-        driver.quit()
 
-threading.Thread(target=monitor_aviator, daemon=True).start()
 
-@app.route("/")
-def login(): return render_template("login.html")
+@app.route("/", methods=["GET", "POST"])
+
+def login():
+
+    message = ""
+
+    if request.method == "POST":
+
+        username = request.form["username"]
+
+        password = request.form["password"]
+
+
+
+        if validate_user(username, password):
+
+            return redirect(url_for("welcome"))
+
+        else:
+
+            message = "Invalid account, try again"
+
+
+
+    return render_template("login.html", message=message)
+
+
 
 @app.route("/welcome")
-def welcome(): return render_template("welcome.html")
 
-@app.route("/get-live-signal")
-def get_live_signal():
-    res = jsonify(live_data.copy())
-    live_data["new_round"] = False
-    return res
+def welcome():
+
+    return render_template("welcome.html")
+
+
+
+import os
+
+
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=10000)
 
-# Adicione estas linhas logo abaixo de chrome_options.add_argument("--disable-dev-shm-usage")
-chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
-chrome_options.add_argument("--remote-debugging-port=9222")
-chrome_options.add_argument("--proxy-server='direct://'")
-chrome_options.add_argument("--proxy-bypass-list=*")
+    port = int(os.environ.get("PORT", 10000))
 
-# Altere a linha do driver para esta:
-driver = webdriver.Chrome(
-    service=Service(os.environ.get("CHROMEDRIVER_PATH")), 
-    options=chrome_options
-)
+    app.run(host="0.0.0.0", port=port)
+
